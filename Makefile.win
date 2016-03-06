@@ -1,0 +1,37 @@
+# Project: Project1
+# Makefile created by Dev-C++ 5.7.1
+
+CPP      = g++.exe
+CC       = gcc.exe
+WINDRES  = windres.exe
+OBJ      = src/main.o src/matrix.o src/thematrix.o src/wire3d.o
+LINKOBJ  = src/main.o src/matrix.o src/thematrix.o src/wire3d.o
+LIBS     = -L"C:/Users/fen/Downloads/Dev-Cpp 5.7.1 MinGW 4.8.1 Portable/Dev-Cpp/MinGW32/lib" -L"C:/Users/fen/Downloads/Dev-Cpp 5.7.1 MinGW 4.8.1 Portable/Dev-Cpp/MinGW32/mingw32/lib" -static-libstdc++ -static-libgcc -L"allegro/lib" -mwindows -lalleg_s -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lole32 -ldinput -lddraw -ldxguid -lwinmm -ldsound -g3
+INCS     = -I"C:/Users/fen/Downloads/Dev-Cpp 5.7.1 MinGW 4.8.1 Portable/Dev-Cpp/MinGW32/include" -I"C:/Users/fen/Downloads/Dev-Cpp 5.7.1 MinGW 4.8.1 Portable/Dev-Cpp/MinGW32/mingw32/include" -I"C:/Users/fen/Downloads/Dev-Cpp 5.7.1 MinGW 4.8.1 Portable/Dev-Cpp/MinGW32/lib/gcc/mingw32/4.8.1/include" -I"allegro/include"
+CXXINCS  = -I"C:/Users/fen/Downloads/Dev-Cpp 5.7.1 MinGW 4.8.1 Portable/Dev-Cpp/MinGW32/include" -I"C:/Users/fen/Downloads/Dev-Cpp 5.7.1 MinGW 4.8.1 Portable/Dev-Cpp/MinGW32/mingw32/include" -I"C:/Users/fen/Downloads/Dev-Cpp 5.7.1 MinGW 4.8.1 Portable/Dev-Cpp/MinGW32/lib/gcc/mingw32/4.8.1/include" -I"C:/Users/fen/Downloads/Dev-Cpp 5.7.1 MinGW 4.8.1 Portable/Dev-Cpp/MinGW32/lib/gcc/mingw32/4.8.1/include/c++" -I"allegro/include"
+BIN      = allegroTest.exe
+CXXFLAGS = $(CXXINCS) -g3 -DALLEGRO_STATICLINK
+CFLAGS   = $(INCS) -g3 -DALLEGRO_STATICLINK
+RM       = rm.exe -f
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before $(BIN) all-after
+
+clean: clean-custom
+	${RM} $(OBJ) $(BIN)
+
+$(BIN): $(OBJ)
+	$(CPP) $(LINKOBJ) -o $(BIN) $(LIBS)
+
+src/main.o: src/main.cpp
+	$(CPP) -c src/main.cpp -o src/main.o $(CXXFLAGS)
+
+src/matrix.o: src/matrix.cpp
+	$(CPP) -c src/matrix.cpp -o src/matrix.o $(CXXFLAGS)
+
+src/thematrix.o: src/thematrix.cpp
+	$(CPP) -c src/thematrix.cpp -o src/thematrix.o $(CXXFLAGS)
+
+src/wire3d.o: src/wire3d.cpp
+	$(CPP) -c src/wire3d.cpp -o src/wire3d.o $(CXXFLAGS)

@@ -1,0 +1,19 @@
+-------------------------------------------------+
+matrix.dev - Dev 4.9.8.0 project file
+-------------------------------------------------+
+main.cpp - main file of the project
+-------------------------------------------------+
+thematrix.hpp \
+               - all "matrix_like" drawing
+thematrix.cpp /  functions
+-------------------------------------------------+
+wire3d.hpp \
+            - WireFrame 3D drawing system
+wire3d.cpp /  boxes, cylinders
+-------------------------------------------------+
+matrix.hpp \
+            - 3D matrix transformation
+matrix.cpp /  obtained directly from S3dE
+-------------------------------------------------+
+
+Fen
