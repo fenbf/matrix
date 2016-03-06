@@ -205,7 +205,7 @@ int SetupGFX()
 +-----------------------------------------------------------------------------*/
 void SetPalette()
 {
- static int base = 0;
+  static int base = 0;
 
  for (int i = 0; i < 256; i++)
  {
@@ -225,8 +225,6 @@ void SetPalette()
 +-----------------------------------------------------------------------------*/
 int Init()
 {
- int i;
-
  // double buffering:
  buffer = create_bitmap(SCREEN_W, SCREEN_H);
  clear(buffer); 
@@ -340,7 +338,7 @@ int ProcessInput()
 void DrawScene()
 {
  static int i;
- static float sx, sy, sz, cx, cy, cz;
+ static float sx, sy, sz, /*cx,*/ cy/*, cz*/;
  static float cam_x, cam_y, cam_z;
  static float look_x, look_y, look_z;
 
@@ -387,7 +385,7 @@ void DrawScene()
 void UpdateAnimation()
 {
  static int i;
- static int a = 0;
+ //static int a = 0;
  
  if (fen_mode == FALSE)
  {

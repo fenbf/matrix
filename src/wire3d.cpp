@@ -10,7 +10,7 @@ int color_min;
 float falloff;
 
 // other:
-static int i, j, vc;
+//static int i, j, vc;
 static float s, t;
 
 V3D_f *v[96], *vout[96], *vtmp[96];
@@ -56,10 +56,10 @@ int GetColor(float x, float y, float z)
 // ----------------------------------------------------------------------------+ 
 int Clip3D(V3D_f *vtx, int n)
 {
- for (i = 0; i < n; i++)
+ for (int i = 0; i < n; i++)
   v[i] = &vtx[i];
   
- for (i = 0; i < n*12; i++)
+ for (int i = 0; i < n*12; i++)
  {
   vout[i] = &_vout[i];    // vout[i] is pointer so it can't contain any value, only adress !
   vtmp[i] = &_vtmp[i];
@@ -77,25 +77,25 @@ int Process3D(BITMAP *bmp, Vector *verts, int n)
 
  if (n > 8) return 0;
 
- for (i = 0; i < n; i++)
+ for (int i = 0; i < n; i++)
  {
   vtx[i].x = verts[i].x;
   vtx[i].y = verts[i].y;
   vtx[i].z = verts[i].z;
  }
  
- vc = Clip3D((V3D_f *)vtx, n);
+ int vc = Clip3D((V3D_f *)vtx, n);
  if (vc < 2) return 0;
  
  // calc color and 2D position:
- for (i = 0; i < vc; i++)
+ for (int i = 0; i < vc; i++)
  {
   //c[i] = GetColor(vout[i]->x, vout[i]->y, vout[i]->z);
   c[i] = color;
   persp_project_f(vout[i]->x, vout[i]->y, vout[i]->z, &vout[i]->x, &vout[i]->y);
  } 
   
- for (i = 0; i < vc-1; i++)
+ for (int i = 0; i < vc-1; i++)
   do_line(bmp, (int)vout[i]->x, (int)vout[i]->y, (int)vout[i+1]->x, (int)vout[i+1]->y, (c[i]+c[i+1])>>1, draw_pixel); 
  do_line(bmp, (int)vout[vc-1]->x, (int)vout[vc-1]->y, (int)vout[0]->x, (int)vout[0]->y, (c[vc-1]+c[0])>>1, draw_pixel);  
 } 
@@ -127,7 +127,7 @@ void WireBox(BITMAP *bmp, float sx, float sy, float sz)
  verts[6] = Vector(sx, -sy, sz);
  verts[7] = Vector(sx, sy, sz);
  
- for (i = 0; i < 8; i++)
+ for (int i = 0; i < 8; i++)
   ApplyMatrix(verts[i].x, verts[i].y, verts[i].z, &verts[i].x, &verts[i].y, &verts[i].z);
  
  // draw faces:
@@ -149,7 +149,7 @@ void WirePlane(BITMAP *bmp, float size, int w, int h)
  
  // allocate memory for points:
  verts = new Vector*[w+1];
- for (i = 0; i < w+1; i++)
+ for (int i = 0; i < w+1; i++)
   verts[i] = new Vector[h+1]; 
   
  s = -size*(float)w*0.5f; 
@@ -173,7 +173,7 @@ void WirePlane(BITMAP *bmp, float size, int w, int h)
  } 
  
  // clean up:
- for (i = 0; i < w+1; i++)
+ for (int i = 0; i < w+1; i++)
   delete [] verts[i];
  delete [] verts; 
 }                       

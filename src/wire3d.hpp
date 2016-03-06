@@ -36,8 +36,8 @@ class Vector
         
         Vector operator* (float v) { return Vector(x*v, y*v, z*v); }
         Vector operator/ (float v) { if (v == 0.0f) v = 1.0f; return Vector(x/v, y/v, z/v); }
-        Vector operator*= (float v) { x*=v; y*=v; z*=v; }
-        Vector operator/= (float v) { if (v == 0.0f) v = 1.0f/v; x*=v; y*=v; z*=v; }
+        void operator*= (float v) { x*=v; y*=v; z*=v; }
+        void operator/= (float v) { if (v == 0.0f) v = 1.0f/v; x*=v; y*=v; z*=v; }
         
         operator V3D_f() { V3D_f v = { x, y, z, 0.0f, 0.0f, 0 }; return v; }               
         
