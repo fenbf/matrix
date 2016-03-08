@@ -6,6 +6,10 @@
 time_t t;
 struct tm *tc;
 
+FONT *matrix_font;
+int font_height;
+int font_width;
+
 // LLine class implementation -------------------------------------------------+
 int LLine::line_len = 0;
 int LLine::line_col = 0;
@@ -53,15 +57,26 @@ void BlitMap(BITMAP *bmp, BITMAP *map, int fen_mode)
  
  buf[1] = '\0';
  
- for (i = 0; i < map->w; i++)
+ if (fen_mode == TRUE)
  {
-  for (j = 0; j < map->h; j++)
+  buf[0] = fen[i%4];
+  for (i = 0; i < map->w; i++)
   {
-   if (fen_mode == TRUE)
-    buf[0] = fen[i%4];
-   else 
-    buf[0] = rand()%102+21;
-   textout_ex(bmp, font, buf, i<<3, j<<3, map->line[j][i], 0);
+   for (j = 0; j < map->h; j++)
+   {
+    textout_ex(bmp, matrix_font, buf, i*font_width, j*font_height, map->line[j][i], 0);
+   }
+  }
+ }
+ else
+ {
+  for (i = 0; i < map->w; i++)
+  {
+   for (j = 0; j < map->h; j++)
+   {
+    buf[0] = 32+rand()%96;
+    textout_ex(bmp, matrix_font, buf, i*font_width, j*font_height, map->line[j][i], 0);
+   }
   }
  }
 } 

@@ -10,7 +10,7 @@
 #define PROG_AUTHOR "Bart \"Fen\" Filipek"
 
 // some defines ---------------------------------------------------------------+
-#define SETUP_3D
+// #define SETUP_3D
 
 #define DEF_G GFX_AUTODETECT_WINDOWED
 #define DEF_W 640
@@ -40,24 +40,29 @@ END_OF_FUNCTION(UpdateAnim);
 
 // global variables -----------------------------------------------------------+
 PALETTE pal;
-int scr_w, scr_h, bpp;
+int scr_w = 0, scr_h = 0, bpp = 0;
 
 // double buffering:
-BITMAP *buffer;
+BITMAP *buffer = NULL;
 
 // matrix bitmap:
-BITMAP *map;
+BITMAP *map = NULL;
+
+DATAFILE *data = NULL;
+extern FONT *matrix_font;
+extern int font_width;
+extern int font_height;
 
 // switches:
-int pause;
-int info_on;
-int fen_mode;
+int pause = FALSE;
+int info_on = TRUE;
+int fen_mode = FALSE;
 
 // Lines:
-LLine *lines;
+LLine *lines = NULL;
 Vector rot;
 
-float r;
+float clock_rot = 0.0f;
 
 // function prototypes --------------------------------------------------------+
 void TheMatrix();
@@ -74,8 +79,8 @@ void UpdateAnimation();
 /*-----------------------------------------------------------------------------+
 |                         BEGIN OF THE MAIN                                    |
 +-----------------------------------------------------------------------------*/
-int main()
-{
+int main(int argc, char *argv[])
+{	
  if (allegro_init() != 0)
   return 0;
   
@@ -84,6 +89,17 @@ int main()
  install_keyboard();
  
  set_window_title(PROG_NAME);
+ 
+ if (argc > 2)
+ {
+ 	scr_w = atoi(argv[1]);
+ 	scr_h = atoi(argv[2]);
+ }
+ else
+ {
+ 	scr_w = 1600;
+ 	scr_h = 900;
+ }
  
  if (SetupGFX() == FALSE) return 1;
  
@@ -132,16 +148,16 @@ void TheMatrix()
   
   if (info_on == TRUE)
   {
-   textprintf_ex(buffer, font, 10, 10, 255, 0, "fps: %d  ", fps);
-   textout_ex(buffer, font, "Hide INFO [F1]", 10, 20, 255, 0);
-   textout_ex(buffer, font, "Fen Mode [F2]", 10, 30, 255, 0);
-   textout_ex(buffer, font, "Pause Camera [F3]", 10, 40, 255, 0);
-   textout_ex(buffer, font, "Pause All [Space]", 10, 50, 255, 0);
-   textout_ex(buffer, font, "www.bfilipek.com", SCREEN_W-160, SCREEN_H-24, 255, 0);
+   textprintf_ex(buffer, font, 10, 10, 255, -1, "fps: %d  ", fps);
+   textout_ex(buffer, font, "Hide INFO [F1]", 10, 40, 255, -1);
+   textout_ex(buffer, font, "Fen Mode [F2]", 10, 70, 255, -1);
+   textout_ex(buffer, font, "Pause Camera [F3]", 10, 100, 255, -1);
+   textout_ex(buffer, font, "Pause All [Space]", 10, 130, 255, -1);
+   textout_ex(buffer, font, "www.bfilipek.com", SCREEN_W-160, SCREEN_H-44, 255, -1);
   }
   
   blit(buffer, screen, 0, 0, 0, 0, SCREEN_W, SCREEN_H);
- vsync();
+  vsync();
   
   frame++;
  } 
@@ -158,7 +174,7 @@ int SetupGFX()
   if (set_gfx_mode(GFX_GDI, 320, 200, 0, 0) != 0)
   {
    set_gfx_mode(GFX_TEXT, 0, 0, 0, 0);
-   allegro_message("Cannot set any GFX mode!");
+   allegro_message(uconvert_ascii("Cannot set any GFX mode!", tmp));
    allegro_exit();
    return FALSE;
   }
@@ -171,20 +187,14 @@ int SetupGFX()
  #endif // SETUP_3D
  
  gfx_mode = DEF_G;
- scr_w = 1600;
- scr_h = 900;
  bpp = DEF_B;
  
- //GFX_MODE_LIST *gfxList = get_gfx_mode_list(GFX AUTODETECT);
- //int count = gfxList->num_modes;
- 
- 
  #ifdef SETUP_3D
-  //if (!gfx_mode_select(&gfx_mode, &scr_w, &scr_h))
-  //{
-  // allegro_exit();
-  // return FALSE;
-  //} 
+  if (!gfx_mode_select(&gfx_mode, &scr_w, &scr_h))
+  {
+   allegro_exit();
+   return FALSE;
+  } 
  #endif // SETUP_3D 
  
  set_color_depth(bpp);
@@ -205,7 +215,7 @@ int SetupGFX()
 +-----------------------------------------------------------------------------*/
 void SetPalette()
 {
-  static int base = 0;
+ int base = 0;
 
  for (int i = 0; i < 256; i++)
  {
@@ -227,13 +237,21 @@ int Init()
 {
  // double buffering:
  buffer = create_bitmap(SCREEN_W, SCREEN_H);
- clear(buffer); 
+ clear(buffer);
  
+ PALETTE palette;
+
+ matrix_font = font;//load_font("matrixFont.pcx", palette, NULL);
+ if (!matrix_font)
+  return FALSE;
+         
+ font_width = font_height = text_height(matrix_font);
+
  // create "char map":
- map = create_bitmap(SCREEN_W>>3, SCREEN_H>>3);
+ map = create_bitmap(SCREEN_W/font_width, SCREEN_H/font_height);
  if (map == NULL) return FALSE;
  clear(map);
- 
+
  // lines:
  lines = new LLine[map->w];  
  LLine::line_len = (map->h<<1)+(map->h>>2);
@@ -244,7 +262,7 @@ int Init()
  
  SetPalette();
  
- set_projection_viewport(0, 0, scr_w/8, scr_h/8);
+ set_projection_viewport(0, 0, scr_w/font_width, scr_h/font_height);
  InitMatrices();
  
  draw_pixel = PutLetter;
@@ -252,10 +270,6 @@ int Init()
  color_min  = 0;
  falloff = 150.0f;
  
- pause = FALSE;
- info_on = TRUE;
- fen_mode = FALSE;
- r = 0.0f;
  return TRUE;
 } 
 
@@ -264,10 +278,10 @@ int Init()
 +-----------------------------------------------------------------------------*/
 void Deinit()
 {
- if (buffer != NULL) destroy_bitmap(buffer);
- if (map != NULL) destroy_bitmap(map);
+ if (buffer) destroy_bitmap(buffer);
+ if (map) destroy_bitmap(map);
  
- if (lines != NULL) delete [] lines;
+ delete [] lines;
  lines = NULL;
 } 
 
@@ -277,7 +291,7 @@ void Deinit()
 int ProcessInput()
 {
  static int keys[4] = { 0, 0, 0, 0};
- static int p = 0;
+ static int curr_scr_id = 0;
  static char buf[20];
  
  if (key[KEY_ESC]) return FALSE;
@@ -291,9 +305,9 @@ int ProcessInput()
  // photo:
  if (key[KEY_HOME])
  {
-  sprintf(buf, "scr_shot%d.pcx", p++);
-  save_pcx(buf, buffer, NULL);
-  rest(100);
+  sprintf(buf, "scr_shot%003d.tga", curr_scr_id++);
+  save_tga(buf, buffer, NULL);
+  //rest(100);
  }  
   
  // pause:
@@ -374,7 +388,7 @@ void DrawScene()
        
  ResetMatrix();
  RotateMatrix(64.0f, 0.0f, 0.0f);
- DrawClock(map, r); 
+ DrawClock(map, clock_rot); 
    
  BlitMap(buffer, map, fen_mode); 
 }
@@ -399,7 +413,7 @@ void UpdateAnimation()
  rot.y+=0.012f;
  rot.z+=0.02f;
 }
- r-=1.5f;
+ clock_rot-=1.5f;
 
 }   
 

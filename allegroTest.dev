@@ -1,20 +1,20 @@
 [Project]
 FileName=allegroTest.dev
-Name=Project1
+Name=TheMatrix Updated
 UnitCount=4
 Type=0
 Ver=2
 ObjFiles=
-Includes="C:\Users\fen\Downloads\Dev-Cpp 5.7.1 MinGW 4.8.1 Portable\Dev-Cpp\include"
-Libs="C:\Users\fen\Downloads\Dev-Cpp 5.7.1 MinGW 4.8.1 Portable\Dev-Cpp\lib"
-PrivateResource=
+Includes=allegro\include
+Libs=allegro\lib
+PrivateResource=allegroTest_private.rc
 ResourceIncludes=
 MakeIncludes=
 Compiler=-DALLEGRO_STATICLINK_@@_
 CppCompiler=-DALLEGRO_STATICLINK_@@_
 Linker=-lalleg_s -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lole32 -ldinput -lddraw -ldxguid -lwinmm -ldsound_@@_
 IsCpp=1
-Icon=
+Icon=allegroTest.ico
 ExeOutput=
 ObjectOutput=
 OverrideOutput=0
@@ -27,7 +27,7 @@ CustomMakefile=
 IncludeVersionInfo=0
 SupportXPThemes=0
 CompilerSet=1
-CompilerSettings=0000000000000000001000000
+CompilerSettings=0000000000101000001000000
 LogOutput=
 LogOutputEnabled=0
 

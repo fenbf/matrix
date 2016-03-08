@@ -98,6 +98,8 @@ int Process3D(BITMAP *bmp, Vector *verts, int n)
  for (int i = 0; i < vc-1; i++)
   do_line(bmp, (int)vout[i]->x, (int)vout[i]->y, (int)vout[i+1]->x, (int)vout[i+1]->y, (c[i]+c[i+1])>>1, draw_pixel); 
  do_line(bmp, (int)vout[vc-1]->x, (int)vout[vc-1]->y, (int)vout[0]->x, (int)vout[0]->y, (c[vc-1]+c[0])>>1, draw_pixel);  
+ 
+ return 0;
 } 
 
 // ----------------------------------------------------------------------------+
@@ -184,16 +186,19 @@ void WirePlane(BITMAP *bmp, float size, int w, int h)
 void WireCylinder(BITMAP *bmp, float r, float h, int faces, int parts, int top, int bottom)
 {
  static float ang, b, x, z;
- static Vector **verts;
+ static Vector verts[16][16];
  static int m, n;
 
  s = h*0.5f;
  const float angDelta = (M_PI*2.0f)/(float)faces;
  b = h/(float)parts;
  
- verts = new Vector*[parts+1];
- for (n = 0; n < parts+1; n++)                
-  verts[n] = new Vector[faces];
+ //verts = new Vector*[parts+1];
+ //for (n = 0; n < parts+1; n++)                
+  //verts[n] = new Vector[faces];
+ 
+ //if ((parts+1)*faces > maxV) 
+  //maxV = (parts+1)*faces;
  
  // get points:
  ang = 0.0f;
@@ -217,9 +222,9 @@ void WireCylinder(BITMAP *bmp, float r, float h, int faces, int parts, int top, 
   WireQuad(bmp, verts[n][m], verts[n+1][m], verts[n+1][0], verts[n][0]);
  }
 
- for (m = 0; m < parts+1; m++)
-  delete [] verts[m];
- delete [] verts; 
+ //for (m = 0; m < parts+1; m++)
+ // delete [] verts[m];
+ //delete [] verts; 
 } 
  
 // end of file ----------------------------------------------------------------+ 
