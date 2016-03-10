@@ -57,6 +57,8 @@ extern int font_height;
 int pause = FALSE;
 int info_on = TRUE;
 int fen_mode = FALSE;
+int show_map = FALSE;
+int show_palette = FALSE;
 
 // Lines:
 LLine *lines = NULL;
@@ -149,10 +151,10 @@ void TheMatrix()
   if (info_on == TRUE)
   {
    textprintf_ex(buffer, font, 10, 10, 255, -1, "fps: %d  ", fps);
-   textout_ex(buffer, font, "Hide INFO [F1]", 10, 40, 255, -1);
-   textout_ex(buffer, font, "Fen Mode [F2]", 10, 70, 255, -1);
-   textout_ex(buffer, font, "Pause Camera [F3]", 10, 100, 255, -1);
-   textout_ex(buffer, font, "Pause All [Space]", 10, 130, 255, -1);
+   textout_ex(buffer, font, "Hide INFO [F1]", 10, 20, 255, -1);
+   textout_ex(buffer, font, "Fen Mode [F2]", 10, 30, 255, -1);
+   textout_ex(buffer, font, "Pause Camera [F3]", 10, 40, 255, -1);
+   textout_ex(buffer, font, "Pause All [Space]", 10, 50, 255, -1);
    textout_ex(buffer, font, "www.bfilipek.com", SCREEN_W-160, SCREEN_H-44, 255, -1);
   }
   
@@ -290,7 +292,7 @@ void Deinit()
 +-----------------------------------------------------------------------------*/
 int ProcessInput()
 {
- static int keys[4] = { 0, 0, 0, 0};
+ static int keys[6] = { 0, 0, 0, 0, 0, 0};
  static int curr_scr_id = 0;
  static char buf[20];
  
@@ -331,17 +333,29 @@ int ProcessInput()
   keys[2] = fps>>2;
  } 
  
- // "fen" mode
+ // pause camera
  if (key[KEY_F3] && keys[3] == 0)
  {
   pauseCamera = ( pauseCamera == TRUE ? FALSE : TRUE );
   keys[3] = fps>>2;
  } 
  
- if (keys[0] > 0) keys[0]--;
- if (keys[1] > 0) keys[1]--;
- if (keys[2] > 0) keys[2]--;
- if (keys[3] > 0) keys[3]--;
+ // show map
+ if (key[KEY_F4] && keys[4] == 0)
+ {
+  show_map = ( show_map == TRUE ? FALSE : TRUE );
+  keys[4] = fps>>2;
+ } 
+ 
+ // show palette
+ if (key[KEY_F5] && keys[5] == 0)
+ {
+  show_palette = ( show_palette == TRUE ? FALSE : TRUE );
+  keys[5] = fps>>2;
+ } 
+ 
+ for (int i = 0; i < 6; ++i)
+  if (keys[i] > 0) keys[i]--;
   
  return TRUE;
 }
@@ -376,9 +390,9 @@ void DrawScene()
  cy = cos(rot.y);
  //cz = cos(rot.z);
  
- cam_x = 36.0f*sx*sy;
+ cam_x = 68.0f*sx*sy;
  cam_y = 4.0f+24.0f*cy;
- cam_z = 12.0f-36.0f*sz;
+ cam_z = 12.0f-68.0f*sz;
  
  look_x = 8.0f*sx*sy;
  look_y = 12.0f*cy;
@@ -391,6 +405,25 @@ void DrawScene()
  DrawClock(map, clock_rot); 
    
  BlitMap(buffer, map, fen_mode); 
+ 
+ if (show_map)
+ {
+  int mapw = scr_w/font_width;
+  int maph = scr_h/font_height;
+  rect(buffer, 10-1, 60-1, 10+mapw*2+1, 60+maph*2, 200);
+  stretch_blit(map, buffer, 0, 0, mapw, maph, 10, 60, mapw*2, maph*2);
+ }
+ 
+ if (show_palette)
+ {
+   for (int i = 0; i < 256; ++i)
+ 	 fastline(buffer, 10, scr_h - 10 - 256 +i, 100, scr_h - 10 - 256 +i, i);
+ 	
+	textout_ex(buffer, font, "64", 110, scr_h - 10 - 256 + 64, 64, -1); 
+    textout_ex(buffer, font, "128", 110, scr_h - 10 - 256 + 128, 128, -1);
+    textout_ex(buffer, font, "160", 110, scr_h - 10 - 256 + 160, 160, -1);
+    textout_ex(buffer, font, "192", 110, scr_h - 10 - 256 + 192, 192, -1);
+ }
 }
 
 /*-----------------------------------------------------------------------------+

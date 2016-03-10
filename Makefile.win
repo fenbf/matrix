@@ -1,8 +1,8 @@
 # Project: TheMatrix Updated
 # Makefile created by Dev-C++ 5.7.1
 
-CPP      = g++.exe -D__DEBUG__
-CC       = gcc.exe -D__DEBUG__
+CPP      = g++.exe
+CC       = gcc.exe
 WINDRES  = windres.exe
 RES      = allegroTest_private.res
 OBJ      = src/main.o src/matrix.o src/thematrix.o src/wire3d.o $(RES)
@@ -11,8 +11,8 @@ LIBS     = -L"C:/Users/fen/Downloads/Dev-Cpp 5.7.1 MinGW 4.8.1 Portable/Dev-Cpp/
 INCS     = -I"C:/Users/fen/Downloads/Dev-Cpp 5.7.1 MinGW 4.8.1 Portable/Dev-Cpp/MinGW32/include" -I"C:/Users/fen/Downloads/Dev-Cpp 5.7.1 MinGW 4.8.1 Portable/Dev-Cpp/MinGW32/mingw32/include" -I"C:/Users/fen/Downloads/Dev-Cpp 5.7.1 MinGW 4.8.1 Portable/Dev-Cpp/MinGW32/lib/gcc/mingw32/4.8.1/include" -I"allegro/include"
 CXXINCS  = -I"C:/Users/fen/Downloads/Dev-Cpp 5.7.1 MinGW 4.8.1 Portable/Dev-Cpp/MinGW32/include" -I"C:/Users/fen/Downloads/Dev-Cpp 5.7.1 MinGW 4.8.1 Portable/Dev-Cpp/MinGW32/mingw32/include" -I"C:/Users/fen/Downloads/Dev-Cpp 5.7.1 MinGW 4.8.1 Portable/Dev-Cpp/MinGW32/lib/gcc/mingw32/4.8.1/include" -I"C:/Users/fen/Downloads/Dev-Cpp 5.7.1 MinGW 4.8.1 Portable/Dev-Cpp/MinGW32/lib/gcc/mingw32/4.8.1/include/c++" -I"allegro/include"
 BIN      = allegroTest.exe
-CXXFLAGS = $(CXXINCS) -Wall -pedantic -g3 -DALLEGRO_STATICLINK
-CFLAGS   = $(INCS) -Wall -pedantic -g3 -DALLEGRO_STATICLINK
+CXXFLAGS = $(CXXINCS) -g3 -DALLEGRO_STATICLINK
+CFLAGS   = $(INCS) -g3 -DALLEGRO_STATICLINK
 RM       = rm.exe -f
 
 .PHONY: all all-before all-after clean clean-custom
