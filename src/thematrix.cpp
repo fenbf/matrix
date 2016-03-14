@@ -31,7 +31,7 @@ void LLine::Draw(BITMAP *map, int i)
  {
   if ((int)y-p < 0) break;
   if ((int)y-p > map->h-1) continue;    
-  if (p == 0) map->line[(int)y-p][i] = 220;
+  if (p == 0) map->line[(int)y-p][i] = 230; // white-green...
   else                   
   map->line[(int)y-p][i] = line_col-(int)((float)p*line_asp);
  }

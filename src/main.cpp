@@ -309,7 +309,7 @@ int ProcessInput()
  {
   sprintf(buf, "scr_shot%003d.tga", curr_scr_id++);
   save_tga(buf, buffer, NULL);
-  //rest(100);
+  rest(100);
  }  
   
  // pause:
@@ -365,7 +365,6 @@ int ProcessInput()
 +-----------------------------------------------------------------------------*/
 void DrawScene()
 {
- static int i;
  static float sx, sy, sz, /*cx,*/ cy/*, cz*/;
  static float cam_x, cam_y, cam_z;
  static float look_x, look_y, look_z;
@@ -379,7 +378,7 @@ void DrawScene()
  {
   color_min = 0;  
   clear_to_color(map, 0);
-  for (i = 0; i < map->w; i++)
+  for (int i = 0; i < map->w; i++)
    lines[i].Draw(map, i); 
  }
      
@@ -431,23 +430,19 @@ void DrawScene()
 +-----------------------------------------------------------------------------*/
 void UpdateAnimation()
 {
- static int i;
- //static int a = 0;
- 
  if (fen_mode == FALSE)
  {
-  for (i = 0; i < map->w; i++)
+  for (int i = 0; i < map->w; i++)
    lines[i].Update(map->h);
  }
  
  if (pauseCamera == FALSE) 
  {
- rot.x+=0.005f;
- rot.y+=0.012f;
- rot.z+=0.02f;
-}
- clock_rot-=1.5f;
-
+  rot.x += 0.005f;
+  rot.y += 0.012f;
+  rot.z += 0.02f;
+ }
+ clock_rot -= 1.5f;
 }   
 
 // end of file ----------------------------------------------------------------+      
