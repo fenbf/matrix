@@ -1,5 +1,7 @@
 ##The Matrix
 
+Very old project, initially done in 2003, resurrected and recompiled. Plaease watch out for the code quality... it's really outdated! :)
+
 Read more about this project at [Code and Graphics blog](http://www.bfilipek.com/2016/03/the-matrix-updated.html)
 
 * ESC   - exit
