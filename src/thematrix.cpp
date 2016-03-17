@@ -61,11 +61,11 @@ void BlitMap(BITMAP *bmp, BITMAP *map, int fen_mode)
  
  if (fen_mode == TRUE)
  {
-  buf[0] = fen[i%4];
   for (i = 0; i < map->w; i++)
   {
    for (j = 0; j < map->h; j++)
    {
+   	buf[0] = fen[i%4];
     textout_ex(bmp, matrix_font, buf, i*font_width, j*font_height, map->line[j][i], 0);
    }
   }
@@ -88,7 +88,7 @@ void BlitMap(BITMAP *bmp, BITMAP *map, int fen_mode)
 +-----------------------------------------------------------------------------*/ 
 void PutLetter(BITMAP *bmp, int x, int y, int c)
 {
- if (x > 0 && x < bmp->w && y > 0 && y < bmp->h)
+ if (x >= 0 && x < bmp->w && y >= 0 && y < bmp->h)
  {
   if (/*bmp->line[y][x] < c &&*/ bmp->line[y][x] > 0) 
    bmp->line[y][x] = c;

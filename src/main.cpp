@@ -293,7 +293,7 @@ void Deinit()
 int ProcessInput()
 {
  static int keys[6] = { 0, 0, 0, 0, 0, 0};
- static int curr_scr_id = 0;
+ static int curr_scr_id = 0, curr_map_scr_id = 0;
  static char buf[20];
  
  if (key[KEY_ESC]) return FALSE;
@@ -310,6 +310,13 @@ int ProcessInput()
   sprintf(buf, "scr_shot%003d.tga", curr_scr_id++);
   save_tga(buf, buffer, NULL);
   rest(100);
+ }  
+ 
+ if (key[KEY_END])
+ {
+  sprintf(buf, "map%003d.bmp", curr_map_scr_id++);
+  save_bmp(buf, map, NULL);
+  rest(40);
  }  
   
  // pause:
